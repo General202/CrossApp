@@ -7,3 +7,6 @@ dotnet build
 dotnet run --project src/Cli
 # Середовище розробки
 .NET SDK 9.0, VS Code, Windows 11 x64
+# Додаткове завдання
+win-x64: 74,3 Mb
+linux-x64: 75,9 Mb
