@@ -33,3 +33,5 @@ dotnet run --project src/Cli -- --json
 win-x64: 74,3 Mb
 linux-x64: 75,9 Mb
 
+# перевірка коміту
+
