@@ -33,5 +33,9 @@ dotnet run --project src/Cli -- --json
 win-x64: 74,3 Mb
 linux-x64: 75,9 Mb
 
+# Результати додаткових завдань до Lab 02
+SingleFile: `PublishSingleFile=true`, к-сть файлів: 1-2 файли (плюс `.pdb`), ~67,67, Запускається.
+Trimming: `PublishSingleFile=true` + `PublishTrimmed=true`, к-сть файлів: така сама, ~12.38, Запускається.
+
 # перевірка коміту
 
