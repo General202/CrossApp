@@ -1,33 +1,34 @@
-﻿using System;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
-using Core;
+﻿using Core.Dto;
+using Core.Import;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-EnvironmentReport report = EnvironmentInfo.Collect();
+string path = args.Length > 0 ? args[0] : Path.Combine("data", "sample.csv");
 
-if (args.Contains("--json"))
+if (!File.Exists(path))
 {
-    var jsonOptions = new JsonSerializerOptions
+    Console.WriteLine($"Помилка: Файл не знайдено за шляхом '{Path.GetFullPath(path)}'");
+    return 1;
+}
+
+ImportResult<ProductDto> result = ProductCsvImporter.Load(path);
+
+Console.WriteLine($"Успішно завантажено записів: {result.Items.Count}");
+Console.WriteLine(new string('-', 60));
+
+foreach (ProductDto p in result.Items.Take(5))
+{
+    Console.WriteLine($" {p.Id,-7} {p.Name,-25} {p.Price,10:F2} грн  {(p.Category ?? "-"),-12}");
+}
+
+if (result.Errors.Count > 0)
+{
+    Console.WriteLine(new string('-', 60));
+    Console.WriteLine($"Пропущено пошкоджених рядків: {result.Errors.Count}");
+    foreach (string err in result.Errors)
     {
-        WriteIndented = true,
-        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
-    };
-    Console.WriteLine(JsonSerializer.Serialize(report, jsonOptions));
+        Console.WriteLine($"  ! {err}");
+    }
 }
-else
-{
-    Console.WriteLine("CrossApp - інформація про середовище");
-    Console.WriteLine(new string('-', 52));
-    Console.WriteLine($"ОС                 : {report.OsDescription}");
-    Console.WriteLine($"Runtime            : {report.FrameworkDescription}");
-    Console.WriteLine($"Архітектура        : {report.ProcessArchitecture}");
-    Console.WriteLine($"RID (визначено)    : {report.DetectedRid}");
-    Console.WriteLine($"RID (від .NET)     : {report.ReportedRid}");
-    Console.WriteLine($"Каталог застосунку : {report.BaseDirectory}");
-    Console.WriteLine(new string('-', 52));
-    Console.WriteLine("Предметна область  : Замовлення (Customer, Product, Order, OrderLine)");
-}
+
+return 0;
