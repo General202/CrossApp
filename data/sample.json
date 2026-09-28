@@ -1,0 +1,7 @@
+[
+  { "id": "J-001", "name": "Миша Logitech MX Master", "price": 4200.00, "category": "Периферія" },
+  { "id": "J-002", "name": "Клавіатура Keychron K2", "price": 3900.00, "category": "Периферія" },
+  { "id": "", "name": "Помилковий товар без ID", "price": 1000.00, "category": "Тест" },
+  { "id": "J-004", "name": "Навушники Sony WH-1000XM5", "price": -150.00, "category": "Аудіо" },
+  { "id": "J-005", "name": "Монітор Dell UltraSharp 27", "price": 18500.00, "category": "Монітори" }
+]
