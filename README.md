@@ -39,3 +39,15 @@ Trimming: `PublishSingleFile=true` + `PublishTrimmed=true`, к-сть файлі
 
 # перевірка коміту
 
+# Перелік реалізованих бізнес-інваріантів (Core/Domain):
+
+Ідентифікатори (`Id`, `CustomerId`, `ProductId`): : не можуть бути порожніми рядками чи містити лише пробіли (`ArgumentException`).
+
+Параметри товару (`Price`, `Quantity`): ціна не може бути від'ємною, а кількість товарів у рядку замовлення має бути строго $> 0$ (`ArgumentOutOfRangeException`).
+
+Інкапсуляція стану замовлення: додавання позицій до замовлення дозволено тільки у стані `Draft`. Додавання до `Confirmed` або `Cancelled` блокується (`InvalidOperationException`).
+
+Мінімальний вміст для підтвердження: замовлення без жодного товару не може бути переведене в стан `Confirmed` (`InvalidOperationException`).
+
+Контроль переходів станів (`OrderStatus`): дозволені лише коректні переходи `Draft -> Confirmed`, `Draft -> Cancelled`, `Confirmed -> Cancelled` (`InvalidOperationException`).
+
