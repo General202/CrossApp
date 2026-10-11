@@ -73,10 +73,8 @@ public sealed class Order
     public void Confirm() => ChangeStatus(OrderStatus.Confirmed);
     public void Cancel() => ChangeStatus(OrderStatus.Cancelled);
 
-    // Мапінг у DTO тижня 3 (для підтримки сховищ)
     public OrderDto ToDto() => new(Id, CustomerId, TotalAmount, Status.ToString(), _lines.Count);
 
-    // Відновлення сутності з DTO через перевірки інваріантів
     public static Order FromDto(OrderDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

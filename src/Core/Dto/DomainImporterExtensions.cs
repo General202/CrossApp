@@ -5,7 +5,6 @@ namespace Core.Import;
 
 public static class DomainImporterExtensions
 {
-    // Додаткове завдання 1: Перетворення ImportResult<ProductDto> у перевірені сутності + помилки інваріантів
     public static (List<OrderLine> ValidLines, List<string> DomainErrors) ConvertToOrderLines(
         this ImportResult<ProductDto> importResult, int defaultQuantity = 1)
     {
@@ -28,9 +27,6 @@ public static class DomainImporterExtensions
         return (validLines, errors);
     }
 
-    // Додаткове завдання 2: Перевірка правила, що охоплює ДВІ сутності (Клієнт та Замовлення)
-    // Пояснення для звіту: Такі перевірки виносяться у сервіс, бо сутність Замовлення не повинна
-    // мати прямих посилань на базу даних всіх замовлень клієнта для перевірки їх кількості.
     public static bool ValidateMaxActiveOrdersForCustomer(string customerId, int currentActiveOrdersCount, int maxAllowed = 5)
     {
         if (currentActiveOrdersCount >= maxAllowed)
