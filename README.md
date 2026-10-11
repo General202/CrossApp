@@ -51,3 +51,25 @@ Trimming: `PublishSingleFile=true` + `PublishTrimmed=true`, к-сть файлі
 
 Контроль переходів станів (`OrderStatus`): дозволені лише коректні переходи `Draft -> Confirmed`, `Draft -> Cancelled`, `Confirmed -> Cancelled` (`InvalidOperationException`).
 
+
+## Лабораторна робота 5: Сервісний шар та Сховища
+
+### Архітектура
+**Інтерфейс сховища**: `IOrderStore` (Core/Abstractions)
+**Реалізації**:
+ `InMemoryOrderStore` — зберігання у пам'яті через `Dictionary`.
+ `FileOrderStore` — збереження у JSON файл (`data/orders.json`).
+ `CachingOrderStore` — Декоратор кешування для `IOrderStore`.
+ **Сервісний шар**: `OrderService` (залежить суто від `IOrderStore`)[cite: 41, 44, 45].
+ **Composition Root**: `Program.cs` / `StoreFactory`[cite: 41, 42, 45, 51].
+
+# Команди запуску:
+```powershell
+# Запуск у пам'яті
+dotnet run --project src/Cli
+
+# Запуск з файловим сховищем JSON
+dotnet run --project src/Cli -- --file
+
+# Запуск з кешуванням
+dotnet run --project src/Cli -- --file --cache
