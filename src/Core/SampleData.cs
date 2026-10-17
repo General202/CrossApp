@@ -8,7 +8,7 @@ public static class SampleData
     {
         var o1 = Order.Create("ORD-1001", "CUST-001");
         o1.AddLine("P-01", "Ноутбук Lenovo", 38000m, 1);
-        o1.AddLine("P-02", "Бездротова миша", 800m, 2);
+        o1.AddLine("P-02", "Бездротова миша", 8000m, 2);
         o1.Confirm();
 
         var o2 = Order.Create("ORD-1002", "CUST-002");

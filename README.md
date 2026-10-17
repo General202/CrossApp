@@ -73,3 +73,18 @@ dotnet run --project src/Cli -- --file
 
 # Запуск з кешуванням
 dotnet run --project src/Cli -- --file --cache
+
+## Лабораторна робота 6: Доменні події, делегати та лямбди
+
+### Реалізовані механізми:
+**Перелічення змін**: `OrderChangeKind` (`Created`, `LineAdded`, `Confirmed`, `Cancelled`).
+**Аргументи події**: `OrderChangedEventArgs` (успадковано від `EventArgs`)[cite: 46, 49].
+**Доменна подія**: `public event EventHandler<OrderChangedEventArgs>? OrderChanged` у `OrderService`[cite: 47, 49].
+**Обробка сповіщень**:
+  * Підписка через локальний метод `OnOrderChanged` з логуванням у консоль та файл `logs/app.log`[cite: 48].
+  * Підписка лямбдою із замиканням над лічильником `changesCounter`.
+  * Демонстрація відписки через `-=`.
+**Додаткові завдання**:
+  1. `INotificationSink` (`ConsoleSink`, `FileSink`) для ручного DI.
+  2. `Action<string>` під час імпорту CSV.
+  3. Обґрунтування загрози `async void` обробників подій.
