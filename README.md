@@ -88,3 +88,22 @@ dotnet run --project src/Cli -- --file --cache
   1. `INotificationSink` (`ConsoleSink`, `FileSink`) для ручного DI.
   2. `Action<string>` під час імпорту CSV.
   3. Обґрунтування загрози `async void` обробників подій.
+
+## Лабораторна робота 7: Звіти через LINQ
+
+### Пояснення відкладеного виконання (Deferred Execution):
+В операторах `Where`, `Select`, `OrderBy` запит не обробляє джерело в момент оголошення, а створює лише дерево виконання.
+Обчислення відбуваються лише під час ітерації (`foreach`) або викликати завершальних операторів (`ToList()`, `Count()`).
+У нашому демо `demo-deferred`:
+1. Перший `query.Count()` виконав запит та знайшов початкові чернетки[cite: 41, 44].
+2. Після додавання елемента у `sourceList` повторний `query.Count()` підрахував оновлену колекцію, бо запит кожного разу заново перебирає джерело[cite: 39, 41, 44].
+3. Після виклика `snapshot = query.ToList()` результат зафіксувався у пам'яті. Подульше очищення джерела `sourceList.Clear()` вже не впливає на `snapshot.Count`[cite: 39, 41, 44].
+
+### Команди запуску звітів CLI:
+```powershell
+dotnet run --project src/Cli -- report-top
+dotnet run --project src/Cli -- report-groups
+dotnet run --project src/Cli -- report-sum
+dotnet run --project src/Cli -- report-join
+dotnet run --project src/Cli -- report-benchmark
+dotnet run --project src/Cli -- demo-deferred
