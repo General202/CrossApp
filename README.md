@@ -97,7 +97,7 @@ dotnet run --project src/Cli -- --file --cache
 У нашому демо `demo-deferred`:
 1. Перший `query.Count()` виконав запит та знайшов початкові чернетки[cite: 41, 44].
 2. Після додавання елемента у `sourceList` повторний `query.Count()` підрахував оновлену колекцію, бо запит кожного разу заново перебирає джерело[cite: 39, 41, 44].
-3. Після виклика `snapshot = query.ToList()` результат зафіксувався у пам'яті. Подульше очищення джерела `sourceList.Clear()` вже не впливає на `snapshot.Count`[cite: 39, 41, 44].
+3. Після виклика `snapshot = query.ToList()` результат зафіксувався у пам'яті. Подальше очищення джерела `sourceList.Clear()` вже не впливає на `snapshot.Count`.
 
 ### Команди запуску звітів CLI:
 ```powershell
@@ -107,3 +107,4 @@ dotnet run --project src/Cli -- report-sum
 dotnet run --project src/Cli -- report-join
 dotnet run --project src/Cli -- report-benchmark
 dotnet run --project src/Cli -- demo-deferred
+dotnet run --project src/Cli -- report-low
