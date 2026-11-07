@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using Core.Abstractions;
 using Core.Domain;
 
@@ -11,7 +10,8 @@ public sealed class FileOrderStore(string path) : IOrderStore
     private static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
-        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     private readonly Dictionary<string, Order> _cache = new(StringComparer.OrdinalIgnoreCase);
@@ -47,7 +47,11 @@ public sealed class FileOrderStore(string path) : IOrderStore
         }
 
         var dtos = _cache.Values.Select(OrderStorageDto.FromDomain).ToList();
-        File.WriteAllText(_path, JsonSerializer.Serialize(dtos, Options));
+
+        // Атомарний запис згідно з вимогами 9-ї лаби (через .tmp та File.Move)
+        string tmpPath = _path + ".tmp";
+        File.WriteAllText(tmpPath, JsonSerializer.Serialize(dtos, Options));
+        File.Move(tmpPath, _path, overwrite: true);
     }
 
     public IReadOnlyList<Order> List()
@@ -68,7 +72,7 @@ public sealed class FileOrderStore(string path) : IOrderStore
         EnsureLoaded();
 
         if (_cache.ContainsKey(item.Id))
-            throw new InvalidOperationException($"Замовлення з Id='{item.Id}' вже існує у файловому сховищі.");
+            throw new DomainException($"Замовлення з Id='{item.Id}' вже існує у файловому сховищі.");
 
         _cache.Add(item.Id, item);
         Flush();

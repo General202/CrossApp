@@ -114,3 +114,23 @@ dotnet run --project src/Cli -- report-low
 ### Запуск тестів xUnit:
 ```powershell
 dotnet test
+
+## Лабораторна робота 9: Шляхи, JSON, конфігурація, Secrets
+
+### Таблиця ключів конфігурації:
+| Ключ конфігурації | Змінна середовища | Значення за замовчуванням |
+| :--- | :--- | :--- |
+| `EnvironmentName` | `CROSSAPP_ENVIRONMENT` | `Development` |
+| `Storage:DataPath` | `CROSSAPP_Storage__DataPath` | `data` |
+| `Storage:FileName` | `CROSSAPP_Storage__FileName` | `orders.json` |
+| `Orders:Currency` | `CROSSAPP_Orders__Currency` | `UAH` |
+| `Integration:ApiKey` | `CROSSAPP_Integration__ApiKey` | *User Secrets* |
+
+### Приклади перевизначення ш шляхів (PowerShell & Bash):
+```powershell
+# PowerShell
+\$env:CROSSAPP_DATA_PATH = "C:\temp\mydata"
+dotnet run --project src/Cli -- export
+
+# Bash / Linux
+CROSSAPP_DATA_PATH=/tmp/data dotnet run --project src/Cli -- export

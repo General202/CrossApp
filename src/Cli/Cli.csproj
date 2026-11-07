@@ -4,11 +4,32 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>addbd684-2c5e-4cb7-b1c2-144479bfd456</UserSecretsId>
   </PropertyGroup>
 
 </Project>
