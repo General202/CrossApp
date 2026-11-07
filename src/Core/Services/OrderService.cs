@@ -15,7 +15,7 @@ public sealed class OrderService(IOrderStore store, IEnumerable<INotificationSin
     private void OnOrderChanged(Order order, OrderChangeKind kind)
     {
         var args = new OrderChangedEventArgs(order.Id, kind, order.CustomerId, order.TotalAmount, order.Lines.Count);
-        
+
         // 1. Підняття стандартної .NET події через умовний виклик ?.Invoke
         OrderChanged?.Invoke(this, args);
 
@@ -46,7 +46,7 @@ public sealed class OrderService(IOrderStore store, IEnumerable<INotificationSin
 
     public void AddProductToOrder(string orderId, string productId, string productName, decimal price, int quantity)
     {
-        var order = _store.GetById(orderId) 
+        var order = _store.GetById(orderId)
             ?? throw new InvalidOperationException($"Замовлення з Id='{orderId}' не знайдено.");
 
         order.AddLine(productId, productName, price, quantity); // якщо інваріант кине виняток — події НЕ буде
@@ -57,7 +57,7 @@ public sealed class OrderService(IOrderStore store, IEnumerable<INotificationSin
 
     public void ConfirmOrder(string orderId)
     {
-        var order = _store.GetById(orderId) 
+        var order = _store.GetById(orderId)
             ?? throw new InvalidOperationException($"Замовлення з Id='{orderId}' не знайдено.");
 
         order.Confirm();
@@ -68,7 +68,7 @@ public sealed class OrderService(IOrderStore store, IEnumerable<INotificationSin
 
     public void CancelOrder(string orderId)
     {
-        var order = _store.GetById(orderId) 
+        var order = _store.GetById(orderId)
             ?? throw new InvalidOperationException($"Замовлення з Id='{orderId}' не знайдено.");
 
         order.Cancel();
@@ -82,6 +82,38 @@ public sealed class OrderService(IOrderStore store, IEnumerable<INotificationSin
     public Order? GetOrder(string id) => _store.GetById(id);
 
     // Використання Func<Order, bool> делегату для розширеного пошуку
-    public IReadOnlyList<Order> FindOrders(Func<Order, bool> predicate) => 
+    public IReadOnlyList<Order> FindOrders(Func<Order, bool> predicate) =>
         _store.Find(predicate);
+
+    // Додаємо метод імпорту з підтримкою CancellationToken та IProgress<int> (Додаткове завдання 3)
+    public async Task<int> ImportOrdersAsync(
+        IOrderImporter importer,
+        string path,
+        IProgress<int>? progress = null,
+        CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(importer);
+
+        var items = await importer.LoadAsync(path, ct);
+        int added = 0;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            var item = items[i];
+            if (_store.GetById(item.Id) is not null)
+                continue; // Ідемпотентність: пропускаємо вже наявні замовлення
+
+            _store.Add(item);
+            OnOrderChanged(item, OrderChangeKind.Created);
+            added++;
+
+            // Сповіщення про прогрес у відсотках
+            progress?.Report((i + 1) * 100 / items.Count);
+        }
+
+        return added;
+    }
+
 }

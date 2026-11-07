@@ -1,0 +1,28 @@
+[
+  {
+    "Id": "ORD-1001",
+    "CustomerId": "CUST-001",
+    "Status": "Confirmed",
+    "Lines": [
+      {
+        "ProductId": "P-01",
+        "ProductName": "Ноутбук Lenovo",
+        "Price": 38000.0,
+        "Quantity": 1
+      }
+    ]
+  },
+  {
+    "Id": "ORD-1002",
+    "CustomerId": "CUST-002",
+    "Status": "Draft",
+    "Lines": [
+      {
+        "ProductId": "P-02",
+        "ProductName": "Миша бездротова",
+        "Price": 800.0,
+        "Quantity": 2
+      }
+    ]
+  }
+]

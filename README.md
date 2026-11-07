@@ -108,3 +108,9 @@ dotnet run --project src/Cli -- report-join
 dotnet run --project src/Cli -- report-benchmark
 dotnet run --project src/Cli -- demo-deferred
 dotnet run --project src/Cli -- report-low
+
+## Лабораторна робота 8: async/await, Скасування та Unit-тести
+
+### Запуск тестів xUnit:
+```powershell
+dotnet test
